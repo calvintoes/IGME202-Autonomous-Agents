@@ -19,15 +19,15 @@ public class Zombie : Vehicle {
 		if (lst.Count > 0)
 		{
 			UltimateForce += Seek(ClosestHuman());
-
-			foreach (GameObject item in zombies)
-			{
-				UltimateForce += Separation(item);
-			}
 		}
 		else
 		{
 			UltimateForce += Wander();
+		}
+
+		foreach (GameObject item in zombies)
+		{
+			UltimateForce += Separation(item);
 		}
 
 		Debug.DrawLine(vehiclePosition, vehiclePosition + transform.forward, Color.yellow);

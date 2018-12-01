@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿	using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,7 +22,6 @@ abstract public class Vehicle : MonoBehaviour
 	public float safeDistance;
 	private float randAngle;
 	public float wanderRadius;
-	private float angleRotation;
 
 	//Bools
 	protected bool inBounds = true;
@@ -205,11 +204,14 @@ abstract public class Vehicle : MonoBehaviour
 		{
 			if (Vector3.Distance(gameObject.transform.position, vehiclePosition) < 3f)
 			{
-				steeringForce = Flee(gameObject.transform.position);
+				Debug.Log("separate");
+				Debug.DrawLine(vehiclePosition, vehiclePosition + steeringForce, Color.red);
+				return Flee(gameObject);
 			}
+			
 		}
 	
-		return steeringForce * 3f;
+		return Vector3.zero;
 
 	}
 	

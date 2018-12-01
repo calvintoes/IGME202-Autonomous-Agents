@@ -113,7 +113,7 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   mass: 0
   maxSpeed: 8
-  radius: 0
+  radius: 1
   safeDistance: 2
   wanderRadius: 4
   DebugForward: {fileID: 2100000, guid: 19c924a9ff2e15c44b96233c7c51aa51, type: 2}

@@ -4,13 +4,9 @@ using UnityEngine;
 
 public class Human : Vehicle {
 
-	public float HumanMaxSpeed = 5f;
+	public float HumanMaxSpeed;
 	ZombieManager zombieManager;
 	HumanManager humanManager;
-
-	
-	////public Material material4;
-	//public Material material5;
 
 	GameObject zombie;
 
