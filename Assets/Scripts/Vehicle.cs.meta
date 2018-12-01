@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 70b45fb2e31d428408a680af8c984618
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - DebugForward: {fileID: 2100000, guid: 19c924a9ff2e15c44b96233c7c51aa51, type: 2}
+  - DebugRight: {fileID: 2100000, guid: 589d66a46f6e58e4091a0631d7cb8e24, type: 2}
+  - DebugFuture: {instanceID: 0}
+  - DebugChase: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
