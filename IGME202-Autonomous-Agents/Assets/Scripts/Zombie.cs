@@ -16,13 +16,13 @@ public class Zombie : Vehicle {
 
 		List<GameObject> lst = humanManager.HumanList;
 		List<GameObject> zombies = zombieManager.ZombieList;
-		List<Obstacle> obstacles = ObstacleManager.obstacles;
+		List<GameObject> obstacles = ObstacleManager.obstacles;
 
 		Vector3 UltimateForce = Vector3.zero;
 
 		if (lst.Count > 0)
 		{
-			//UltimateForce += Seek(ClosestHuman());
+			UltimateForce += Seek(ClosestHuman());
 		}
 		else
 		{
@@ -38,7 +38,7 @@ public class Zombie : Vehicle {
 			
 		}
 
-		foreach (Obstacle ob in obstacles) {
+		foreach (GameObject ob in obstacles) {
 			UltimateForce += ObstacleAvoidance(ob);
 		}
 		//Debug.DrawLine(vehiclePosition, vehiclePosition + transform.forward, Color.yellow);

@@ -225,53 +225,111 @@ abstract public class Vehicle : MonoBehaviour
 		return Vector3.zero;
 
 	}
-	
+
 	/// <summary>
 	/// 
 	/// </summary>
 	/// <param name="obstacle"></param>
 	/// <returns></returns>
-	public Vector3 ObstacleAvoidance(Obstacle obstacle)
+	//public Vector3 ObstacleAvoidance(Obstacle obstacle)
+	//{
+
+	//	Vector3 VectToCenter = obstacle.transform.position - transform.position;
+	//	float dotRight = Vector3.Dot(VectToCenter, transform.right);
+	//	float dotForward = Vector3.Dot(VectToCenter, transform.forward);
+	//	float radiiSum = obstacle.radius + radius;
+
+
+	//	//Ignore anything behind char - exit and return zero
+	//	if (dotForward < 0)
+	//	{
+	//		return Vector3.zero;
+	//	}
+
+	//	//Ignore anything oustide of "safe radius" - exit then return zero
+	//	if (VectToCenter.magnitude > safeDistance)
+	//	{
+	//		return Vector3.zero;
+	//	}
+
+	//	//Test for Non-Intersection
+	//	if (Mathf.Abs(dotRight) > radiiSum)
+	//	{
+	//		return Vector3.zero;
+	//	}
+
+	//	//Steer away from obstacle
+	//	Vector3 desiredVelocity;
+	//	if (dotRight < 0)
+	//	{
+	//		Debug.Log("avoid right");
+	//		desiredVelocity = transform.right * maxSpeed;
+	//	}
+	//	else
+	//	{
+	//		Debug.Log("avoid left");
+	//		desiredVelocity = -transform.right * maxSpeed;
+	//	}
+	//	Debug.DrawLine(transform.position, obstacle.transform.position, Color.magenta);
+	//	Debug.DrawLine(transform.position, transform.position + (desiredVelocity * maxSpeed), Color.yellow);
+
+	//	return (desiredVelocity - velocity) * 3f;
+	//}
+
+	protected Vector3 ObstacleAvoidance(GameObject obstacle)
 	{
+		// Info needed for obstacle avoidance
+		Vector3 vecToCenter = obstacle.transform.position - vehiclePosition;
+		float dotForward = Vector3.Dot(vecToCenter, transform.forward);
+		float dotRight = Vector3.Dot(vecToCenter, transform.right);
+		float radiiSum = obstacle.GetComponent<Obstacle>().radius + radius;
 
-		Vector3 VectToCenter = obstacle.transform.position - transform.position;
-		float dotRight = Vector3.Dot(VectToCenter, transform.right);
-		float dotForward = Vector3.Dot(VectToCenter, transform.forward);
-		float radiiSum = obstacle.radius + radius;
-
-		//Ignore anything behind char - exit and return zero
+		// Step 1: Are there objects in front of me?  
+		// If obstacle is behind, ignore, no need to steer - exit method
+		// Compare dot forward < 0
 		if (dotForward < 0)
 		{
 			return Vector3.zero;
 		}
 
-		//Ignore anything oustide of "safe radius" - exit then return zero
-		if (VectToCenter.magnitude > safeDistance)
+		// Step 2: Are the obstacles close enough to me?  
+		// Do they fit within my "safe" distance
+		// If the distance > safe, exit method
+		if (vecToCenter.magnitude > safeDistance)
 		{
 			return Vector3.zero;
 		}
 
-		//Test for Non-Intersection
-		if (Mathf.Abs(dotRight) > radiiSum)
+		// Step 3:  Check radii sum against distance on one axis
+		// Check dot right, 
+		// If dot right is > radii sum, exit method
+		if (radiiSum < Mathf.Abs(dotRight))
 		{
 			return Vector3.zero;
 		}
 
-		//Steer away from obstacle
+		// NOW WE HAVE TO STEER!  
+		// The only way to get to this code is if the obstacle is in my path
+		// Determine if obstacle is to my left or right
+		// Desired velocity in opposite direction * max speed
 		Vector3 desiredVelocity;
-		if (dotRight < 0)
+
+		if (dotRight < 0)        // Left
 		{
-			Debug.Log("avoid right");
 			desiredVelocity = transform.right * maxSpeed;
 		}
-		else
+		else                    // Right
 		{
 			desiredVelocity = -transform.right * maxSpeed;
 		}
-		Debug.DrawLine(transform.position, obstacle.transform.position, Color.magenta);
-		Debug.DrawLine(transform.position, transform.position + (desiredVelocity * maxSpeed), Color.yellow);
 
-		return (desiredVelocity - velocity);
+		// Debug line to obstacle
+		// Helpful to see which obstacle(s) a vehicle is attempting to maneuver around
+		Debug.DrawLine(transform.position, obstacle.transform.position, Color.green);
+
+		// Return steering force
+		Vector3 steeringForce = desiredVelocity - velocity;
+		return steeringForce;
 	}
 
 	public Vector3 Wander() {

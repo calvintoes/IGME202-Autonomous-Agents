@@ -16,7 +16,7 @@ public class Human : Vehicle {
 
 		List<GameObject> humans = humanManager.HumanList;
 		List<GameObject> zLst = zombieManager.ZombieList;
-		List<Obstacle> obstacles = ObstacleManager.obstacles;
+		List<GameObject> obstacles = ObstacleManager.obstacles;
 		Vector3 UltimateForce = Vector3.zero;
 	
 		for (int i = 0; i < zLst.Count; i++)
@@ -42,7 +42,7 @@ public class Human : Vehicle {
 			}
 		}
 
-		foreach (Obstacle ob in obstacles)
+		foreach (GameObject ob in obstacles)
 		{
 			UltimateForce += ObstacleAvoidance(ob);
 		}
