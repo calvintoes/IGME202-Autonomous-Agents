@@ -9,7 +9,6 @@ public class HumanManager : MonoBehaviour {
 	public ZombieManager ZombieManager;
 	public GameObject zombie;
 
-	
 	//public int amt; have user input??
 	
 	// Use this for initialization

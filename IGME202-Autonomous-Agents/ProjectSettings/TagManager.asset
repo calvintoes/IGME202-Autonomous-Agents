@@ -6,6 +6,7 @@ TagManager:
   tags:
   - zombie
   - human
+  - tree
   layers:
   - Default
   - TransparentFX

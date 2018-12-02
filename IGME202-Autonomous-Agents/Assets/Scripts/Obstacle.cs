@@ -7,10 +7,10 @@ public class Obstacle : MonoBehaviour {
 	public float radius;
 	public Vector3 obstaclePosition;
 
-	public List<GameObject> obstacles = new List<GameObject>();
+	
 	// Use this for initialization
 	void Start () {
-		
+		obstaclePosition = transform.position;
 	}
 	
 	// Update is called once per frame

@@ -115,7 +115,7 @@ MonoBehaviour:
   maxSpeed: 5
   radius: 1
   safeDistance: 2
-  wanderRadius: 5
+  wanderRadius: 3
   DebugForward: {fileID: 2100000, guid: 19c924a9ff2e15c44b96233c7c51aa51, type: 2}
   DebugRight: {fileID: 2100000, guid: 589d66a46f6e58e4091a0631d7cb8e24, type: 2}
   DebugFuture: {fileID: 2100000, guid: 00cfc6b2f482f5a41be038a3aec496d6, type: 2}

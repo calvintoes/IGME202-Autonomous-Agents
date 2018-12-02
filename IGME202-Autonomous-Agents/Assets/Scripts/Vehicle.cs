@@ -101,7 +101,7 @@ abstract public class Vehicle : MonoBehaviour
 	{
 		// Step 1: Find DV (desired velocity)
 		// TargetPos - CurrentPos
-		Vector3 desiredVelocity = (targetPosition + (velocity * 3)) - vehiclePosition;
+		Vector3 desiredVelocity = (targetPosition + velocity) - vehiclePosition;
 
 		// Step 2: Scale vel to max speed
 		// desiredVelocity = Vector3.ClampMagnitude(desiredVelocity, maxSpeed);
@@ -132,7 +132,7 @@ abstract public class Vehicle : MonoBehaviour
 	/// <returns></returns>
 	public Vector3 Flee(Vector3 targetPosition) {
 
-		Vector3 desiredVelocity = vehiclePosition - (targetPosition + (velocity * 5));
+		Vector3 desiredVelocity = vehiclePosition - (targetPosition + velocity);
 
 		desiredVelocity.Normalize();
 		desiredVelocity = desiredVelocity * maxSpeed;
@@ -140,6 +140,7 @@ abstract public class Vehicle : MonoBehaviour
 		Vector3 fleeingForce = desiredVelocity - velocity;
 
 		return fleeingForce;
+
 	}
 
 	/// <summary>
@@ -184,7 +185,7 @@ abstract public class Vehicle : MonoBehaviour
 			inBounds = true;
 		}
 
-		return steer * 2f;
+		return steer * 3f;
 
 	}
 
@@ -194,22 +195,32 @@ abstract public class Vehicle : MonoBehaviour
 	/// </summary>
 	/// <returns>Steering force</returns>
 	public Vector3 Separation(GameObject gameObject) {
-		Vector3 steeringForce = Vector3.zero;
 
 		//Find neighbors
 		//Calculate a steering vector away from each neighbor
 		//use weights that are inversely proportional (1/distance)
 		//Sum up all the forces
-		if (gameObject.transform.position != vehiclePosition)
+		float distance = Vector3.Distance(gameObject.transform.position, vehiclePosition);
+
+		
+		if ( distance < 8f)
 		{
-			if (Vector3.Distance(gameObject.transform.position, vehiclePosition) < 3f)
-			{
-				Debug.Log("separate");
-				Debug.DrawLine(vehiclePosition, vehiclePosition + steeringForce, Color.red);
-				return Flee(gameObject);
-			}
-			
+			Debug.Log("separate");
+			Debug.DrawLine(vehiclePosition, vehiclePosition + Flee(gameObject), Color.red);
+
+			Vector3 desiredVelocity = vehiclePosition - (gameObject.transform.position);
+
+			desiredVelocity.Normalize();
+			desiredVelocity = desiredVelocity * maxSpeed; ;
+
+			Vector3 fleeingForce = desiredVelocity - velocity;
+			fleeingForce = fleeingForce * (1/distance);
+
+			return fleeingForce;
+			//return Flee(gameObject);
 		}
+			
+		
 	
 		return Vector3.zero;
 
@@ -250,13 +261,14 @@ abstract public class Vehicle : MonoBehaviour
 		Vector3 desiredVelocity;
 		if (dotRight < 0)
 		{
+			Debug.Log("avoid right");
 			desiredVelocity = transform.right * maxSpeed;
 		}
 		else
 		{
 			desiredVelocity = -transform.right * maxSpeed;
 		}
-		Debug.DrawLine(transform.position, obstacle.transform.position, Color.red);
+		Debug.DrawLine(transform.position, obstacle.transform.position, Color.magenta);
 		Debug.DrawLine(transform.position, transform.position + (desiredVelocity * maxSpeed), Color.yellow);
 
 		return (desiredVelocity - velocity);

@@ -5,16 +5,18 @@ using UnityEngine;
 public class Human : Vehicle {
 
 	public float HumanMaxSpeed;
-	ZombieManager zombieManager;
 	HumanManager humanManager;
-
-	GameObject zombie;
+	ZombieManager zombieManager;
+	ObstacleManager ObstacleManager;
 
 	public override Vector3 CalcSteeringForces() {
-		zombieManager = GameObject.Find("ZombieManager").GetComponent<ZombieManager>();
 		humanManager = GameObject.Find("HumanManager").GetComponent<HumanManager>();
+		zombieManager = GameObject.Find("ZombieManager").GetComponent<ZombieManager>();
+		ObstacleManager = GameObject.Find("ObstacleManager").GetComponent<ObstacleManager>();
+
 		List<GameObject> humans = humanManager.HumanList;
 		List<GameObject> zLst = zombieManager.ZombieList;
+		List<Obstacle> obstacles = ObstacleManager.obstacles;
 		Vector3 UltimateForce = Vector3.zero;
 	
 		for (int i = 0; i < zLst.Count; i++)
@@ -34,10 +36,18 @@ public class Human : Vehicle {
 
 		foreach (GameObject h in humans)
 		{
-			UltimateForce += Separation(h);
+			if (h.transform.position != vehiclePosition)
+			{
+				UltimateForce += Separation(h);
+			}
 		}
 
-		Debug.DrawLine(vehiclePosition, vehiclePosition + transform.forward, Color.green);
+		foreach (Obstacle ob in obstacles)
+		{
+			UltimateForce += ObstacleAvoidance(ob);
+		}
+
+		//Debug.DrawLine(vehiclePosition, vehiclePosition + transform.forward, Color.green);
 		UltimateForce = UltimateForce * HumanMaxSpeed;
 		return UltimateForce;
     }

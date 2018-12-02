@@ -6,19 +6,23 @@ public class Zombie : Vehicle {
 
 	HumanManager humanManager;
 	ZombieManager zombieManager;
-	
-    public override Vector3 CalcSteeringForces()
+	ObstacleManager ObstacleManager;
+
+	public override Vector3 CalcSteeringForces()
     {
 		humanManager = GameObject.Find("HumanManager").GetComponent<HumanManager>();
 		zombieManager = GameObject.Find("ZombieManager").GetComponent<ZombieManager>();
+		ObstacleManager = GameObject.Find("ObstacleManager").GetComponent<ObstacleManager>();
+
 		List<GameObject> lst = humanManager.HumanList;
 		List<GameObject> zombies = zombieManager.ZombieList;
-
+		List<Obstacle> obstacles = ObstacleManager.obstacles;
 
 		Vector3 UltimateForce = Vector3.zero;
+
 		if (lst.Count > 0)
 		{
-			UltimateForce += Seek(ClosestHuman());
+			//UltimateForce += Seek(ClosestHuman());
 		}
 		else
 		{
@@ -27,10 +31,17 @@ public class Zombie : Vehicle {
 
 		foreach (GameObject item in zombies)
 		{
-			UltimateForce += Separation(item);
+			if (item.transform.position != vehiclePosition)
+			{
+				UltimateForce += Separation(item);
+			}
+			
 		}
 
-		Debug.DrawLine(vehiclePosition, vehiclePosition + transform.forward, Color.yellow);
+		foreach (Obstacle ob in obstacles) {
+			UltimateForce += ObstacleAvoidance(ob);
+		}
+		//Debug.DrawLine(vehiclePosition, vehiclePosition + transform.forward, Color.yellow);
 		UltimateForce = UltimateForce * maxSpeed;
 
 		return UltimateForce;
